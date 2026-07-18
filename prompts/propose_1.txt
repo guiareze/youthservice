@@ -1,0 +1,11 @@
+O sistema precisa permitir a criação de pessoas.
+
+O projeto é novo e será desenvolvido utilizando Java, Spring Boot, arquitetura hexagonal e banco H2.
+
+Gere uma proposta de especificação para essa funcionalidade.
+
+A especificação deve definir os requisitos funcionais e não funcionais, critérios de aceitação, regras de negócio, riscos, premissas, dúvidas em aberto e decisões arquiteturais que precisam ser tomadas antes da implementação.
+
+Não implemente código.
+
+Faça os artefatos em português.

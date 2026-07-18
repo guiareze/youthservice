@@ -1,6 +1,6 @@
 # youthservice
 
-API REST em Java/Spring Boot para cadastro de pessoas, construída com arquitetura hexagonal (ports & adapters) e banco H2. Projeto novo, ainda em fase inicial — a primeira (e única, até o momento) capability implementada é o **cadastro de pessoas**.
+API REST em Java/Spring Boot para controle de frequência de jovens em uma igreja, construída com arquitetura hexagonal (ports & adapters) e banco H2. Projeto novo, ainda em fase inicial — a primeira (e única, até o momento) capability implementada é o **cadastro de pessoas**, que serão os membros (jovens) cuja frequência o sistema irá controlar.
 
 ## Stack
 

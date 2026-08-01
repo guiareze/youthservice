@@ -1,8 +1,10 @@
 package br.com.guiareze.youthservice.presentation.exception;
 
+import br.com.guiareze.youthservice.domain.exception.EnderecoNaoGeocodificadoException;
 import br.com.guiareze.youthservice.domain.exception.NomeJaCadastradoException;
 import br.com.guiareze.youthservice.domain.exception.PessoaInvalidaException;
 import br.com.guiareze.youthservice.domain.exception.PessoaNaoEncontradaException;
+import br.com.guiareze.youthservice.domain.exception.QuantidadeGruposInvalidaException;
 import br.com.guiareze.youthservice.presentation.dto.ErroResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,6 +40,18 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErroResponse> handlePessoaNaoEncontrada(PessoaNaoEncontradaException ex) {
         log.warn("Pessoa não encontrada: {}", ex.getMessage());
         return responder(HttpStatus.NOT_FOUND, "PESSOA_NAO_ENCONTRADA", ex.getMessage());
+    }
+
+    @ExceptionHandler(QuantidadeGruposInvalidaException.class)
+    public ResponseEntity<ErroResponse> handleQuantidadeGruposInvalida(QuantidadeGruposInvalidaException ex) {
+        log.warn("Quantidade de grupos inválida: {}", ex.getMessage());
+        return responder(HttpStatus.BAD_REQUEST, "QUANTIDADE_GRUPOS_INVALIDA", ex.getMessage());
+    }
+
+    @ExceptionHandler(EnderecoNaoGeocodificadoException.class)
+    public ResponseEntity<ErroResponse> handleEnderecoNaoGeocodificado(EnderecoNaoGeocodificadoException ex) {
+        log.error("Falha ao geocodificar endereço(s): {}", ex.getMessage(), ex);
+        return responder(HttpStatus.UNPROCESSABLE_ENTITY, "ENDERECO_NAO_GEOCODIFICADO", ex.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)

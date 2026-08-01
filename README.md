@@ -1,6 +1,6 @@
 # youthservice
 
-API REST em Java/Spring Boot para controle de frequência de jovens em uma igreja, construída com arquitetura hexagonal (ports & adapters) e banco H2. Projeto novo, ainda em fase inicial — a primeira (e única, até o momento) capability implementada é o **cadastro de pessoas**, que serão os membros (jovens) cuja frequência o sistema irá controlar.
+API REST em Java/Spring Boot para controle de frequência de jovens em uma igreja, construída com arquitetura hexagonal (ports & adapters) e banco H2. Projeto novo, ainda em fase inicial. Capabilities implementadas até o momento: **cadastro de pessoas** (membros/jovens cuja frequência o sistema irá controlar) e **planejamento de rotas** de visita domiciliar por grupo de voluntários.
 
 ## Stack
 
@@ -57,6 +57,22 @@ Regras de negócio principais:
 Erros seguem um formato padrão (`ErroResponse`: `erro`, `mensagem`, `timestamp`) com códigos `DADOS_INVALIDOS` (400, falha de Bean Validation), `PESSOA_INVALIDA` (400, falha de regra de domínio), `NOME_JA_CADASTRADO` (409), `PESSOA_NAO_ENCONTRADA` (404).
 
 Documentação detalhada da API: [`docs/api-pessoas.md`](docs/api-pessoas.md).
+
+## Capability: planejamento de rotas
+
+Endpoint (base path `/rotas`, sempre `application/json`):
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| `POST` | `/rotas/planejamento` | Divide uma lista de endereços a visitar entre grupos de voluntários por proximidade geográfica, e ordena a rota de cada grupo do endereço mais distante ao mais próximo do ponto de partida |
+
+Regras de negócio principais:
+- Cada endereço é geocodificado a partir de CEP + número, usando **ViaCEP** (CEP → logradouro/bairro/cidade/UF) e **Nominatim/OpenStreetMap** (endereço completo → latitude/longitude) — ambos gratuitos, sem chave de API, mas o Nominatim tem rate limit de 1 requisição/segundo.
+- Agrupamento por proximidade usa o algoritmo *sweep* (varredura angular a partir do ponto de partida), com grupos de tamanho o mais equilibrado possível.
+- Dentro de cada grupo, a rota é ordenada do endereço mais distante para o mais próximo do ponto de partida (distância em linha reta, fórmula de Haversine).
+- Falha de geocodificação de qualquer endereço rejeita a requisição inteira (sem plano parcial).
+
+Documentação detalhada da API: [`docs/api-planejamento-rotas.md`](docs/api-planejamento-rotas.md).
 
 ## Rodando o projeto
 

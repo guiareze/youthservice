@@ -1,9 +1,12 @@
 package br.com.guiareze.youthservice.presentation.exception;
 
+import br.com.guiareze.youthservice.domain.exception.EnderecoNaoGeocodificadoException;
 import br.com.guiareze.youthservice.domain.exception.NomeJaCadastradoException;
 import br.com.guiareze.youthservice.domain.exception.PessoaInvalidaException;
 import br.com.guiareze.youthservice.domain.exception.PessoaNaoEncontradaException;
+import br.com.guiareze.youthservice.domain.exception.QuantidadeGruposInvalidaException;
 import br.com.guiareze.youthservice.presentation.dto.ErroResponse;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -55,5 +58,25 @@ class GlobalExceptionHandlerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().erro()).isEqualTo("NOME_JA_CADASTRADO");
+    }
+
+    @Test
+    void deveRetornarBadRequestParaQuantidadeDeGruposInvalida() {
+        ResponseEntity<ErroResponse> response =
+                handler.handleQuantidadeGruposInvalida(QuantidadeGruposInvalidaException.quantidadeNaoPositiva());
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().erro()).isEqualTo("QUANTIDADE_GRUPOS_INVALIDA");
+    }
+
+    @Test
+    void deveRetornarUnprocessableEntityParaEnderecoNaoGeocodificado() {
+        ResponseEntity<ErroResponse> response =
+                handler.handleEnderecoNaoGeocodificado(new EnderecoNaoGeocodificadoException(List.of("Maria (CEP 00000000, nº 100)")));
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.UNPROCESSABLE_ENTITY);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().erro()).isEqualTo("ENDERECO_NAO_GEOCODIFICADO");
     }
 }
